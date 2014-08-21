@@ -65,6 +65,12 @@ namespace BackendServices
 
         private void Publish(string clientResponseStream, Event response)
         {
+            var json = Json.To(response);
+            var ev = new EventData(Guid.NewGuid(), 
+                                   response.GetType().Name, 
+                                   true, Encoding.UTF8.GetBytes(json),
+                                   new byte[0]);
+            _connection.AppendToStreamAsync(clientResponseStream, ExpectedVersion.Any, new[] {ev}, _credentials);
         }
     }
 }

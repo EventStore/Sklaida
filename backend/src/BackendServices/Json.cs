@@ -20,7 +20,7 @@ namespace BackendServices
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
 
-        public T From<T>(string text)
+        public static T From<T>(string text)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace BackendServices
             }
         }
 
-        public string To<T>(T value)
+        public static string To<T>(T value)
         {
             if (value == null) return "";
             try
