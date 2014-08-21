@@ -5,11 +5,19 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using EventStore.ClientAPI;
 
 namespace WebAPI.Search
 {
     public class SearchController : ApiController
     {
+        private readonly IEventStoreConnection _eventStoreConnection;
+
+        public SearchController(IEventStoreConnection eventStoreConnection)
+        {
+            _eventStoreConnection = eventStoreConnection;
+        }
+
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);
@@ -21,9 +29,9 @@ namespace WebAPI.Search
 
         public async Task<HttpResponseMessage> Post(OuroSearchRequest request)
         {
-            await Task.Delay(100);
-
             var id = Guid.NewGuid();
+
+
             var response = new HttpResponseMessage(HttpStatusCode.Accepted);
             response.Headers.Location = new Uri(string.Format("search-result/{0}", id.ToString("N")), UriKind.Relative);
             return response;

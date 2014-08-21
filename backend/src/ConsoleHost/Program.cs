@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
 
 namespace ConsoleHost
 {
     internal class Program
     {
+        const string BaseAddress = "http://localhost:9000";
+        static readonly IPEndPoint EventStoreEndPoint = new IPEndPoint(IPAddress.Loopback, 1113);
+
         static void Main()
         {
-            const string baseAddress = "http://localhost:9000";
             var stop = new ManualResetEventSlim(false);
 
-            new ScatterGatherWireUp(baseAddress, stop).Run();
+            new ScatterGatherWireUp(BaseAddress, EventStoreEndPoint, stop).Run();
 
             Console.WriteLine("Press <ENTER> to stop server");
             Console.ReadLine();
