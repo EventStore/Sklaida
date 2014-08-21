@@ -2,7 +2,7 @@
 
 namespace Messages
 {
-    public class SearchRequested : Event
+    public class OuroQuoteDeclined : Event
     {
         public OuroSearchType SearchType { get; set; }
         public DateTime DesiredDeliveryDate { get; set; }
@@ -16,14 +16,13 @@ namespace Messages
 
         public bool PreviouslyOwnedOuros { get; set; }
         public decimal? ValueOfPreviousOuros { get; set; }
+        public string ImageUrl { get; set; }
+        public string Vendor { get; set; }
+        public string VendorImageUrl { get; set; }
 
         public override string ToString()
         {
-            return
-                string.Format(
-                    "SearchType: {0}, DesiredDeliveryDate: {1}, DeliveryPostCode: {2}, Ownership: {3}, NumberOfWings: {4}, WaterproofRequired: {5}, HistoricInterestRequired: {6}, PreviouslyOwnedOuros: {7}, ValueOfPreviousOuros: {8}",
-                    SearchType, DesiredDeliveryDate, DeliveryPostCode, Ownership, NumberOfWings, WaterproofRequired,
-                    HistoricInterestRequired, PreviouslyOwnedOuros, ValueOfPreviousOuros);
+            return string.Format("SearchType: {0}, Vendor: {2}", SearchType, Vendor);
         }
     }
 }

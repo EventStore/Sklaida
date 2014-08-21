@@ -2,7 +2,7 @@
 
 namespace Messages
 {
-    public class ResultFound
+    public class OuroResultFound : Event
     {
         public OuroSearchType SearchType { get; set; }
         public DateTime DesiredDeliveryDate { get; set; }

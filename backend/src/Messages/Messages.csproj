@@ -39,10 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Event.cs" />
+    <Compile Include="OuroQuoteDeclined.cs" />
     <Compile Include="OuroSearchType.cs" />
     <Compile Include="OwnLeaseOption.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResultFound.cs" />
+    <Compile Include="OuroResultFound.cs" />
     <Compile Include="SearchRequested.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
