@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{8A8EE19F-BB0E-404E-B4D8-F3E934F6C3FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleHost", "ConsoleHost\ConsoleHost.csproj", "{8C51DEA0-6C97-490E-9981-07518E9370F2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A8EE19F-BB0E-404E-B4D8-F3E934F6C3FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A8EE19F-BB0E-404E-B4D8-F3E934F6C3FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A8EE19F-BB0E-404E-B4D8-F3E934F6C3FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A8EE19F-BB0E-404E-B4D8-F3E934F6C3FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C51DEA0-6C97-490E-9981-07518E9370F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C51DEA0-6C97-490E-9981-07518E9370F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C51DEA0-6C97-490E-9981-07518E9370F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C51DEA0-6C97-490E-9981-07518E9370F2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
