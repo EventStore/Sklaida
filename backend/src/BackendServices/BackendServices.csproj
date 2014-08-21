@@ -44,9 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Log.cs" />
     <Compile Include="Handles.cs" />
     <Compile Include="IOuroSellerEndpoint.cs" />
     <Compile Include="DecliningOuroSellerEndpoint.cs" />
+    <Compile Include="OuroSellerEndpointAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

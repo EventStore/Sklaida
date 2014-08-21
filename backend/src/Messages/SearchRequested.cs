@@ -7,7 +7,7 @@ namespace Messages
         public OuroSearchType SearchType { get; set; }
         public DateTime DesiredDeliveryDate { get; set; }
         public string DeliveryPostCode { get; set; }
-
+        public string ClientResponseStream { get; set; }
         public OwnLeaseOption Ownership { get; set; }
         public int NumberOfWings { get; set; }
 
