@@ -12,7 +12,7 @@ namespace ConsoleHost
         static void Main()
         {
             var stop = new ManualResetEventSlim(false);
-
+       
             new ScatterGatherWireUp(BaseAddress, EventStoreEndPoint, stop).Run();
 
             Console.WriteLine("Press <ENTER> to stop server");

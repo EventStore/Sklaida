@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Web.Http.SelfHost;
+using BackendServices;
 using EventStore.ClientAPI;
+using EventStore.ClientAPI.SystemData;
 using WebAPI;
 
 namespace ConsoleHost
@@ -12,6 +15,9 @@ namespace ConsoleHost
         private readonly ManualResetEventSlim _stop;
         private readonly string _baseAddress;
         private readonly IPEndPoint _eventStoreEndPoint;
+        private readonly Dictionary<string, OuroSellerEndpointAdapter> _backendAdapters = new Dictionary<string, OuroSellerEndpointAdapter>();
+        private UserCredentials _credentials = new UserCredentials("admin", "changeit");
+        private readonly string _incomingStream = "incoming";
 
         public ScatterGatherWireUp(string baseAddress, IPEndPoint eventStoreEndPoint, ManualResetEventSlim stop)
         {
@@ -29,13 +35,13 @@ namespace ConsoleHost
         private void RunWebApi()
         {
             var webConnectionSettings = ConnectionSettings.Create()
-		.UseConsoleLogger()
+                .UseConsoleLogger()
                 .KeepReconnecting()
                 .KeepRetrying();
             var webEventStoreConnection = EventStoreConnection.Create(webConnectionSettings, _eventStoreEndPoint,
                 "es-web-connection");
             webEventStoreConnection.ConnectAsync().Wait();
-
+            RunBackend();
             var config = new HttpSelfHostConfiguration(_baseAddress);
             new ApiBootstrapper().Configure(config, webEventStoreConnection);
 
@@ -43,6 +49,31 @@ namespace ConsoleHost
             {
                 server.OpenAsync().Wait();
                 _stop.Wait();
+            }
+        }
+
+        private void RunBackend()
+        {
+            var backendSettings = ConnectionSettings.Create()
+                .UseConsoleLogger()
+                .KeepReconnecting()
+                .KeepRetrying();
+            var connection = EventStoreConnection.Create(backendSettings, _eventStoreEndPoint,
+                "es-backend-connection");
+            connection.ConnectAsync().Wait();
+            
+            _backendAdapters.Add("declining1", 
+                                 new OuroSellerEndpointAdapter(connection, 
+                                                              "declining1", 
+                                                              new DecliningOuroSellerEndpoint("crap company", new Uri("http://google.com")),
+                                 _incomingStream, _credentials));    
+        }
+
+        public void StopBackend()
+        {
+            foreach (var a in _backendAdapters.Values)
+            {
+                a.Stop();
             }
         }
     }

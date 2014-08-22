@@ -59,6 +59,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BackendServices\BackendServices.csproj">
+      <Project>{06895C00-2E98-4A7D-9294-C1DE19F7DD88}</Project>
+      <Name>BackendServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebAPI\WebAPI.csproj">
       <Project>{8A8EE19F-BB0E-404E-B4D8-F3E934F6C3FD}</Project>
       <Name>WebAPI</Name>
