@@ -54,7 +54,10 @@
     <Compile Include="ApiBootstrapper.cs" />
     <Compile Include="ApiCompositionRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Search\MessageExtensions.cs" />
+    <Compile Include="Shared\EventExtensions.cs" />
+    <Compile Include="Shared\Json.cs" />
+    <Compile Include="Shared\Log.cs" />
+    <Compile Include="Shared\MessageExtensions.cs" />
     <Compile Include="Search\OuroSearchRequest.cs" />
     <Compile Include="Search\OuroSearchType.cs" />
     <Compile Include="Search\OwnLeaseOption.cs" />

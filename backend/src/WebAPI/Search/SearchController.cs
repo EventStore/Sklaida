@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using EventStore.ClientAPI;
+using EventStore.ClientAPI.SystemData;
+using WebAPI.Shared;
 
 namespace WebAPI.Search
 {
@@ -30,10 +32,16 @@ namespace WebAPI.Search
         public async Task<HttpResponseMessage> Post(OuroSearchRequest request)
         {
             var id = Guid.NewGuid();
+            var resultStream = string.Format("searchresult-{0}", id.ToString("N"));
+            var responseUri = string.Format("search-result/{0}", id.ToString("N"));
 
+            await _eventStoreConnection.SetStreamMetadataAsync(resultStream, ExpectedVersion.EmptyStream,
+                StreamMetadata.Build().SetMaxAge(TimeSpan.FromMinutes(5)), new UserCredentials("admin", "changeit"));
+            await _eventStoreConnection.AppendToStreamAsync("incoming", ExpectedVersion.Any,
+                request.ToEvent(resultStream).ToEventData("searchRequested"));
 
             var response = new HttpResponseMessage(HttpStatusCode.Accepted);
-            response.Headers.Location = new Uri(string.Format("search-result/{0}", id.ToString("N")), UriKind.Relative);
+            response.Headers.Location = new Uri(responseUri, UriKind.Relative);
             return response;
         }
     }
