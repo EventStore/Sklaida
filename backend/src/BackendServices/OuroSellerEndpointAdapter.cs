@@ -51,7 +51,7 @@ namespace BackendServices
         private void EventAppeared(EventStoreSubscription sub, ResolvedEvent e)
         {
             Log.Debug(_adapterName + " received " + Encoding.UTF8.GetString(e.Event.Data));
-            SearchRequested request = null;
+            var request = Json.From<SearchRequested>(Encoding.UTF8.GetString(e.Event.Data));
             try
             {
                 var response = _endpoint.GetQuoteFor(request);
