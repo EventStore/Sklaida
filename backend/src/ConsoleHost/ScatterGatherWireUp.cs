@@ -30,6 +30,7 @@ namespace ConsoleHost
         {
             //Run Web API
             new Thread(RunWebApi).Start();
+            RunBackend();
         }
 
         private void RunWebApi()
@@ -41,7 +42,6 @@ namespace ConsoleHost
             var webEventStoreConnection = EventStoreConnection.Create(webConnectionSettings, _eventStoreEndPoint,
                 "es-web-connection");
             webEventStoreConnection.ConnectAsync().Wait();
-            RunBackend();
             var config = new HttpSelfHostConfiguration(_baseAddress);
             new ApiBootstrapper().Configure(config, webEventStoreConnection);
 
@@ -67,6 +67,9 @@ namespace ConsoleHost
                                                               "declining1", 
                                                               new DecliningOuroSellerEndpoint("crap company", new Uri("http://google.com")),
                                  _incomingStream, _credentials));    
+
+	    foreach (var adapter in _backendAdapters.Values)
+		adapter.StartListening();
         }
 
         public void StopBackend()
