@@ -9,15 +9,22 @@ angular.module('sklaidaApp')
                 }
             }
             $scope.submit = function() {
-                searchService.search($scope.fieldsToSubmit, function(err, response) {
-                    searchService.pollForSearchResult(response.Location, function(err, results) {
-                        $scope.results = [];
-                        results.entries.forEach(function(entry) {
-                            if (entry.isJson) {
-                                $scope.results.push(JSON.parse(entry.data));
-                            }
+                searchService.search($scope.fieldsToSubmit, searchCompleted);
+            }
+
+            function searchCompleted(err, response) {
+                searchService.pollForSearchResult(response.Location, pollResultsReturned);
+            }
+
+            function pollResultsReturned(err, results) {
+                $scope.results = [];
+                results.entries.forEach(function(entry) {
+                    if (entry.isJson) {
+                        $scope.results.push({
+                            data: JSON.parse(entry.data),
+                            type: entry.eventType
                         });
-                    });
+                    }
                 });
             }
 

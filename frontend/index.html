@@ -105,7 +105,9 @@
                 <span ng-show="results.length == 0">No results</span>
                 <ul ng-show="results.length > 0">
                     <li ng-repeat="result in results">
-                        {{ result | json }}
+                        <div class="tile">
+                            <h3>{{ result.type }}</h3>
+                        </div>
                     </li>
                 </ul>
             </div>
