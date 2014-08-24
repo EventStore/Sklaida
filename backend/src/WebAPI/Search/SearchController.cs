@@ -8,9 +8,12 @@ using System.Web.Http.Controllers;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using WebAPI.Shared;
+using System.Web.Http.Cors;
+using System.Net.Http.Formatting;
 
 namespace WebAPI.Search
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*", exposedHeaders: "Location")]
     public class SearchController : ApiController
     {
         private readonly IEventStoreConnection _eventStoreConnection;

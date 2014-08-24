@@ -1,0 +1,11 @@
+{
+  "name": "Sklaida",
+  "version": "1.0.0",
+  "description": "Scatter/Gather",
+  "author": "EventStore",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp-connect": "~2.0.6",
+    "gulp": "~3.8.7"
+  }
+}

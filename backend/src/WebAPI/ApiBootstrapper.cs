@@ -12,12 +12,12 @@ namespace WebAPI
     {
         public void Configure(HttpConfiguration config, IEventStoreConnection eventStoreConnection)
         {
-	    config.Services.Replace(typeof(IHttpControllerActivator), new ApiCompositionRoot(eventStoreConnection));
-
-	    config.Formatters.Clear();
-	    config.Formatters.Add(new JsonMediaTypeFormatter());
+            config.Services.Replace(typeof(IHttpControllerActivator), new ApiCompositionRoot(eventStoreConnection));
+            config.EnableCors();
+            config.Formatters.Clear();
+            config.Formatters.Add(new JsonMediaTypeFormatter());
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-	    config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new StringEnumConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new StringEnumConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Formatting = Formatting.Indented;
 
             config.Routes.MapHttpRoute("InputQueue", "search/", new { Controller = "Search" });
