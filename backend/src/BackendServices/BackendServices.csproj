@@ -43,6 +43,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcceptsAllOuroSellerEndPoint.cs" />
     <Compile Include="Json.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Handles.cs" />

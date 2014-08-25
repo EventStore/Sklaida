@@ -16,8 +16,8 @@ namespace ConsoleHost
         private readonly string _baseAddress;
         private readonly IPEndPoint _eventStoreEndPoint;
         private readonly Dictionary<string, OuroSellerEndpointAdapter> _backendAdapters = new Dictionary<string, OuroSellerEndpointAdapter>();
-        private UserCredentials _credentials = new UserCredentials("admin", "changeit");
-        private readonly string _incomingStream = "incoming";
+        private readonly UserCredentials _credentials = new UserCredentials("admin", "changeit");
+        private const string _incomingStream = "incoming";
 
         public ScatterGatherWireUp(string baseAddress, IPEndPoint eventStoreEndPoint, ManualResetEventSlim stop)
         {
@@ -61,15 +61,25 @@ namespace ConsoleHost
             var connection = EventStoreConnection.Create(backendSettings, _eventStoreEndPoint,
                 "es-backend-connection");
             connection.ConnectAsync().Wait();
-            
-            _backendAdapters.Add("declining1", 
-                                 new OuroSellerEndpointAdapter(connection, 
-                                                              "declining1", 
-                                                              new DecliningOuroSellerEndpoint("crap company", new Uri("http://google.com")),
-                                 _incomingStream, _credentials));    
 
-	    foreach (var adapter in _backendAdapters.Values)
-		adapter.StartListening();
+            _backendAdapters.Add("declining1",
+                new OuroSellerEndpointAdapter(connection,
+                    "declining1",
+                    new DecliningOuroSellerEndpoint("crap company", new Uri("http://google.com")),
+                    _incomingStream, _credentials));
+            _backendAdapters.Add("acceptsall1",
+                new OuroSellerEndpointAdapter(connection,
+                    "acceptsall1",
+                    new AcceptsAllOuroSellerEndPoint("too eager company", new Uri("http://google.com")),
+                    _incomingStream, _credentials));
+            _backendAdapters.Add("acceptsall2",
+                new OuroSellerEndpointAdapter(connection,
+                    "acceptsall2",
+                    new AcceptsAllOuroSellerEndPoint("another eager company", new Uri("http://google.com")),
+                    _incomingStream, _credentials));
+
+            foreach (var adapter in _backendAdapters.Values)
+                adapter.StartListening();
         }
 
         public void StopBackend()

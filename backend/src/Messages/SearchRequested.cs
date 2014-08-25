@@ -18,7 +18,7 @@ namespace Messages
 
         public bool PreviouslyOwnedOuros { get; private set; }
         public decimal? ValueOfPreviousOuros { get; private set; }
-
+        
         public SearchRequested(string clientResponseStream, OuroSearchType searchType, DateTime desiredDeliveryDate, string deliveryPostCode, OwnLeaseOption ownership, int numberOfWings, bool waterproofRequired, bool historicInterestRequired, bool previouslyOwnedOuros, decimal? valueOfPreviousOuros)
         {
 	    ClientResponseStream = clientResponseStream;
