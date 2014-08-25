@@ -27,7 +27,8 @@ namespace BackendServices
                 PreviouslyOwnedOuros = request.PreviouslyOwnedOuros,
                 Price = new Random().Next(0, 1000),
                 SearchType = request.SearchType,
-                ValueOfPreviousOuros = request.ValueOfPreviousOuros
+                ValueOfPreviousOuros = request.ValueOfPreviousOuros,
+                ClickThorughUrl = new Uri("http://google.com?q=where%20is%20ouro?").ToString()
             };
         }
     }
