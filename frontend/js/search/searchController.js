@@ -30,7 +30,6 @@ angular.module('sklaidaApp')
                     data: e.data,
                     type: e.eventType
                 });
-                $scope.$apply();
             }
 
             function formatDate(dateToFormat) {
