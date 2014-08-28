@@ -38,8 +38,13 @@ namespace WebAPI.Search
             var resultStream = string.Format("searchresult-{0}", id.ToString("N"));
             var responseUri = string.Format("search-result/{0}", id.ToString("N"));
 
-            await _eventStoreConnection.SetStreamMetadataAsync(resultStream, ExpectedVersion.EmptyStream,
-                StreamMetadata.Build().SetMaxAge(TimeSpan.FromMinutes(5)), new UserCredentials("admin", "changeit"));
+            await _eventStoreConnection.SetStreamMetadataAsync(resultStream, 
+                                                               ExpectedVersion.EmptyStream,
+                                                               StreamMetadata.Build()
+                                                                            .SetMaxAge(TimeSpan.FromMinutes(5))
+                                                                            .SetWriteRole("$admins")
+                                                                            .SetReadRole("$all"), 
+                                                               new UserCredentials("admin", "changeit"));
             await _eventStoreConnection.AppendToStreamAsync("incoming", ExpectedVersion.Any,
                 request.ToEvent(resultStream).ToEventData("searchRequested"));
 
