@@ -38,6 +38,18 @@ namespace WebAPI.Search
             var resultStream = string.Format("searchresult-{0}", id.ToString("N"));
             var responseUri = string.Format("search-result/{0}", id.ToString("N"));
 
+            //This will set the stream ACL to allow reads from all but only writes from
+            //the admins group. With more secure data you may limit reads only to the user
+            //that made the request and likely a backenduser who is likely not a member 
+            //of the $admins group for security purposes.
+            //
+            //This code also sets and expiration on the stream of 5 minutes. More than
+            //likely in a production system you would not want such a short expiration
+            //this is more so to be able to show the functionality of expiring the
+            //results over time in a way that can actually be demoed. In most such
+            //systems this would likely be months or possibly even never due to 
+            //operational needs of being able to see what happened with a given 
+            //request.
             await _eventStoreConnection.SetStreamMetadataAsync(resultStream, 
                                                                ExpectedVersion.EmptyStream,
                                                                StreamMetadata.Build()
