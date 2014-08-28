@@ -1,63 +1,40 @@
 angular.module('sklaidaApp')
-    .factory('atomPollerService', ['$http', function($http) {
-    			return{
-    				stop : function(){
-    					currentTimeout = null;
-    				},
-    				start : startPolling
-    			}
-    			var currentTimeout = null;
-                function getFeedLink(links, linkRel) {
-                    var res = $.grep(links, function(link) {
-                        return link.relation === linkRel;
-                    });
-                    return res.length ? res[0].uri : null;
-                }
-                function startPolling(streamUrl, callback) {
-                    var nextPageUrl = streamUrl;
-                    var readNextPage = readFirstPage;
-
-                    readFirstPage();
-
-                    function readFirstPage() {
-                        currentTimeout = null;
-                        $http.get(nextPageUrl + '?embed=content', {
-                            headers: {
-                                'Accept': 'application/vnd.eventstore.atom+json'
-                            }
-                        })
-                        .success(function(data, status, header) {
-                            var lastLink = getFeedLink(data.links, 'last');
-                            if (!lastLink) {
-                                // head is the last page already
-                                if (data.entries) {
-                                    for (var i = 0, n = data.entries.length; i < n; i += 1) {
-                                        var event = data.entries[n - i - 1].content;
-                                        if (event)
-                                            callback(null, event);
-                                    }
-                                }
-                                nextPageUrl = getFeedLink(data.links, 'previous');
-                            } else {
-                                nextPageUrl = lastLink;
-                            }
-                            readNextPage = readForwardPage;
-                            currentTimeout = setTimeout(readNextPage, 0);
-                        })
-                        .error(function(data, status) {
-                            currentTimeout = setTimeout(readNextPage, 1000);
-                        });
+    .factory('atomPollerService', ['$http', '$q', '$timeout',
+        function($http, $q, $timeout) {
+            var pollingInterval = 1000;
+            var currentPoller = null;
+            return {
+                stop: function() {
+                    if(currentPoller !== null){
+                        currentPoller.stop();
                     }
+                },
+                start: function(urlToPoll, callback) {
+                    currentPoller = atomPoller($http, $timeout, $q, urlToPoll, callback);
+                }
+            }
 
-                    function readForwardPage() {
-                        currentTimeout = null;
-                        $http.get(nextPageUrl + "?embed=content", {
-                            headers: {
-                                'Accept': 'application/vnd.eventstore.atom+json',
-                                'ES-LongPoll': 30
-                            }
-                        })
-                        .success(function(data, status, jqXHR) {
+            function atomPoller($http, $timeout, $q, streamUrl, callback) {
+                var nextPageUrl = streamUrl;
+                var readNextPage = readFirstPage;
+                var requestCanceller = $q.defer();
+                var timer = null;
+
+                readFirstPage();
+
+                function readFirstPage() {
+                    $http.get(nextPageUrl + '?embed=content', {
+                        headers: {
+                            'Accept': 'application/vnd.eventstore.atom+json'
+                        },
+                        timeout: requestCanceller.promise
+                    })
+                    .then(function(response) {
+                        var data = response.data;
+
+                        var lastLink = getFeedLink(data.links, 'last');
+                        if (!lastLink) {
+                            // head is the last page already
                             if (data.entries) {
                                 for (var i = 0, n = data.entries.length; i < n; i += 1) {
                                     var event = data.entries[n - i - 1].content;
@@ -65,13 +42,52 @@ angular.module('sklaidaApp')
                                         callback(null, event);
                                 }
                             }
-                            var prevLink = getFeedLink(data.links, 'previous');
-                            nextPageUrl = prevLink || nextPageUrl;
-                            currentTimeout = setTimeout(readNextPage, prevLink ? 0 : 1000);
-                        })
-                        .error(function(data, status) {
-                            currentTimeout = setTimeout(readNextPage, 1000);
-                        });
+                            nextPageUrl = getFeedLink(data.links, 'previous');
+                        } else {
+                            nextPageUrl = lastLink;
+                        }
+                        readNextPage = readForwardPage;
+                        timer = $timeout(readNextPage, 0);
+                    });
+                }
+
+                function readForwardPage() {
+                    $timeout.cancel(timer);
+                    $http.get(nextPageUrl + "?embed=content", {
+                        headers: {
+                            'Accept': 'application/vnd.eventstore.atom+json',
+                            'ES-LongPoll': 5
+                        },
+                        timeout: requestCanceller.promise
+                    })
+                    .then(function(response) {
+                        var data = response.data;
+
+                        if (data.entries) {
+                            for (var i = 0, n = data.entries.length; i < n; i += 1) {
+                                var event = data.entries[n - i - 1].content;
+                                if (event)
+                                    callback(null, event);
+                            }
+                        }
+                        var prevLink = getFeedLink(data.links, 'previous');
+                        nextPageUrl = prevLink || nextPageUrl;
+                        timer = $timeout(readNextPage, prevLink ? 0 : pollingInterval);
+                    });
+                }
+                return {
+                    stop: function() {
+                        if(timer) $timeout.cancel(timer);
+                        if(requestCanceller) requestCanceller.resolve('cancelled');
                     }
                 }
-            }]);
+            }
+
+            function getFeedLink(links, linkRel) {
+                var res = $.grep(links, function(link) {
+                    return link.relation === linkRel;
+                });
+                return res.length ? res[0].uri : null;
+            }
+        }
+    ]);

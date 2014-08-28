@@ -105,13 +105,13 @@
                 <table class="table-queues">
                     <thead>
                         <tr>
-                            <th>Type</th>
-                            <th>Vendor</th>
-                            <th>Price</th>
+                            <th ng-click="setSortByField('type')">Type &#x21D5;</th>
+                            <th ng-click="setSortByField('data.vendor')">Vendor &#x21D5;</th>
+                            <th ng-click="setSortByField('data.price')">Price &#x21D5;</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="result in results" ng-click="followLink(result)">
+                        <tr ng-repeat="result in results|orderBy:fieldToSortBy:reverseSort" ng-click="followLink(result)">
                             <td>{{ result.type }}</td>
                             <td>{{ result.data.vendor }}</td>
                             <td>{{ result.data.price | currency }}</td>

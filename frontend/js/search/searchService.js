@@ -3,6 +3,7 @@ angular.module('sklaidaApp')
         function searchService($http, atomPollerService) {
             return {
                 search: function(data, callback) {
+                	atomPollerService.stop();
                     var headers = {
                         'Content-Type': 'application/vnd.ouroinc.searchrequest+json; charset=utf-8'
                     };
@@ -13,6 +14,9 @@ angular.module('sklaidaApp')
                         callback(null, {
                             Location: header('Location')
                         });
+                    })
+                    .error(function(data, status){
+                    	callback(data, null);
                     });
                 },
                 pollForResults: function(searchResultUrlToPoll, callback) {
@@ -21,7 +25,6 @@ angular.module('sklaidaApp')
                     var locationToPoll = 'http://localhost:2113/streams/' + locationToPoll;
                     var currentTimeout = null;
                     atomPollerService.start(locationToPoll, callback);
-                    // startPolling($http, currentTimeout, locationToPoll, callback);
                 }
             }
         }

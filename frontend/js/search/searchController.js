@@ -19,6 +19,10 @@ angular.module('sklaidaApp')
                     $window.location.href = result.data.clickThroughUrl;
                 }
             }
+            $scope.setSortByField = function(sortByField){
+                $scope.fieldToSortBy = sortByField;
+                $scope.reverseSort = !$scope.reverseSort;
+            }
 
             function searchCompleted(err, response) {
                 $scope.busy = true;
@@ -26,6 +30,8 @@ angular.module('sklaidaApp')
             }
 
             function resultsReturned(err, e) {
+                $scope.busy = false;
+                if(!e) return;
                 $scope.results.push({
                     data: e.data,
                     type: e.eventType
