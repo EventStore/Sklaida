@@ -9,7 +9,6 @@ using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using WebAPI.Shared;
 using System.Web.Http.Cors;
-using System.Net.Http.Formatting;
 
 namespace WebAPI.Search
 {
@@ -29,7 +28,7 @@ namespace WebAPI.Search
 
             var formatter = controllerContext.Configuration.Formatters.JsonFormatter;
             formatter.SupportedMediaTypes.Clear();
-	    formatter.SupportedMediaTypes.Add(new MediaTypeWithQualityHeaderValue("application/vnd.ouroinc.searchrequest+json"));
+	        formatter.SupportedMediaTypes.Add(new MediaTypeWithQualityHeaderValue("application/vnd.ouroinc.searchrequest+json"));
         }
 
         public async Task<HttpResponseMessage> Post(OuroSearchRequest request)
@@ -43,6 +42,14 @@ namespace WebAPI.Search
             //that made the request and likely a backenduser who is likely not a member 
             //of the $admins group for security purposes.
             //
+            //await _eventStoreConnection.SetStreamMetadataAsync(resultStream,
+            //                                       ExpectedVersion.EmptyStream,
+            //                                       StreamMetadata.Build()
+            //                                                    .SetMaxAge(TimeSpan.FromDays(90))
+            //                                                    .SetWriteRole("backenduser")
+            //                                                    .SetReadRole(Request.User),
+            //                                       new UserCredentials("backenduser", "password"));
+            //
             //This code also sets and expiration on the stream of 5 minutes. More than
             //likely in a production system you would not want such a short expiration
             //this is more so to be able to show the functionality of expiring the
@@ -50,12 +57,12 @@ namespace WebAPI.Search
             //systems this would likely be months or possibly even never due to 
             //operational needs of being able to see what happened with a given 
             //request.
-            await _eventStoreConnection.SetStreamMetadataAsync(resultStream, 
+            await _eventStoreConnection.SetStreamMetadataAsync(resultStream,
                                                                ExpectedVersion.EmptyStream,
                                                                StreamMetadata.Build()
                                                                             .SetMaxAge(TimeSpan.FromMinutes(5))
                                                                             .SetWriteRole("$admins")
-                                                                            .SetReadRole("$all"), 
+                                                                            .SetReadRole("$all"),
                                                                new UserCredentials("admin", "changeit"));
             await _eventStoreConnection.AppendToStreamAsync("incoming", ExpectedVersion.Any,
                 request.ToEvent(resultStream).ToEventData("searchRequested"));
