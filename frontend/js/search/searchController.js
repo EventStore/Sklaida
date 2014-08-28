@@ -1,7 +1,8 @@
 angular.module('sklaidaApp')
-    .controller('searchController', ['$scope', 'searchService',
-        function SearchController($scope, searchService) {
+    .controller('searchController', ['$scope', '$window', 'searchService',
+        function SearchController($scope, $window, searchService) {
             $scope.results = [];
+            $scope.busy = false;
             $scope.init = function() {
                 $scope.fieldsToSubmit = {
                     SearchType: "Template",
@@ -9,22 +10,25 @@ angular.module('sklaidaApp')
                 }
             }
             $scope.submit = function() {
+                $scope.busy = true;
+                $scope.results = [];
                 searchService.search($scope.fieldsToSubmit, searchCompleted);
+            }
+            $scope.followLink = function(result){
+                if(result.data.clickThroughUrl){
+                    $window.location.href = result.data.clickThroughUrl;
+                }
             }
 
             function searchCompleted(err, response) {
-                searchService.pollForSearchResult(response.Location, pollResultsReturned);
+                $scope.busy = true;
+                searchService.pollForResults(response.Location, resultsReturned);
             }
 
-            function pollResultsReturned(err, results) {
-                $scope.results = [];
-                results.entries.forEach(function(entry) {
-                    if (entry.isJson) {
-                        $scope.results.push({
-                            data: JSON.parse(entry.data),
-                            type: entry.eventType
-                        });
-                    }
+            function resultsReturned(err, e) {
+                $scope.results.push({
+                    data: e.data,
+                    type: e.eventType
                 });
             }
 

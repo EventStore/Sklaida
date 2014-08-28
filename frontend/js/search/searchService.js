@@ -1,6 +1,6 @@
 angular.module('sklaidaApp')
-    .factory('searchService', ['$http',
-        function searchService($http) {
+    .factory('searchService', ['$http', 'atomPollerService',
+        function searchService($http, atomPollerService) {
             return {
                 search: function(data, callback) {
                     var headers = {
@@ -15,30 +15,13 @@ angular.module('sklaidaApp')
                         });
                     });
                 },
-                pollForSearchResult: function(searchResultUrlToPoll, callback) {
-                    console.info('weird transformation magic happening here for now');
-                    console.info('the returned location is : ', searchResultUrlToPoll);
+                pollForResults: function(searchResultUrlToPoll, callback) {
+                    console.info('Transformation magic happening here for now. The returned location is : ', searchResultUrlToPoll);
                     var locationToPoll = searchResultUrlToPoll.replace('-', '').replace('/', '-');
-                    var locationToPoll = 'http://localhost:2113/streams/' + locationToPoll + "?embed=tryharder";
-
-                    console.info('transformed to : ', locationToPoll);
-                    var headers = {
-                        'Accept': 'application/vnd.eventstore.atom+json'
-                    };
-
-                    var schedule = function() {
-                        setTimeout(function() {
-                            $http.get(locationToPoll, {
-                                headers: headers
-                            })
-                                .success(function(data, status, header, config) {
-                                    callback(null, data);
-                                    schedule();
-                                });
-                        }, 1000);
-                    }
-
-                    schedule();
+                    var locationToPoll = 'http://localhost:2113/streams/' + locationToPoll;
+                    var currentTimeout = null;
+                    atomPollerService.start(locationToPoll, callback);
+                    // startPolling($http, currentTimeout, locationToPoll, callback);
                 }
             }
         }

@@ -25,7 +25,7 @@
     </header>
     <main class="site-main">
         <div class="container">
-            <div class="container-left">
+            <div class="container-left lighter">
                 <h2 class="page-title">Search</h2>
                 <form class="form-horizontal" ng-init="init()" role="form" ng-submit="submit()">
                     <div class="form-group">
@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <label for="deliveryDate" class="col-sm-2 control-label">Delivery date</label>
                         <div class="col-sm-2">
-                            <input name="DesiredDeliveryDate" ng-model="fieldsToSubmit.DesiredDeliveryDate" type="text" class="form-control datepicker" class="span2" value="02-16-2012">
+                            <input name="DesiredDeliveryDate" ng-model="fieldsToSubmit.DesiredDeliveryDate" type="text" class="form-control datepicker search square" class="span2" value="02-16-2012">
                         </div>
                     </div>
                     <div class="form-group">
@@ -102,23 +102,41 @@
             </div>
             <div class="container-right">
                 <h2 class="page-title">Results</h2>
-                <span ng-show="results.length == 0">No results</span>
-                <ul ng-show="results.length > 0">
-                    <li ng-repeat="result in results">
-                        <div class="tile">
-                            <h3>{{ result.type }}</h3>
-                        </div>
-                    </li>
-                </ul>
+                <table class="table-queues">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Vendor</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="result in results" ng-click="followLink(result)">
+                            <td>{{ result.type }}</td>
+                            <td>{{ result.data.vendor }}</td>
+                            <td>{{ result.data.price | currency }}</td>
+                        </tr>
+                        <tr ng-hide="results.length > 0">
+                            <td colspan="3" style="text-align:center;">
+                                <em ng-show="!busy">No results</em>
+                                <img src="images/loading.gif" ng-show="busy" style="text-align:center"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>{{ result.type }}</h3>
+                <span>
+                    <strong>{{ result.data.price | currency }}</strong>
+                </span>
             </div>
         </div>
     </main>
     <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
-    <script type="text/javascript" src="js/search/controller.js"></script>
+    <script type="text/javascript" src="js/search/searchController.js"></script>
     <script type="text/javascript" src="js/search/searchService.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/atomPollerService.js"></script>
 </body>
 
 </html>
