@@ -70,12 +70,12 @@ namespace ConsoleHost
             _backendAdapters.Add("acceptsall1",
                 new OuroSellerEndpointAdapter(connection,
                     "acceptsall1",
-                    new AcceptsAllOuroSellerEndPoint("Eager Company", new Uri("http://google.com")),
+                    new AcceptsAllOuroSellerEndPoint("Eager Company", new Uri("http://google.com"), new Random().Next(0, 3000)),
                     _incomingStream, _credentials));
             _backendAdapters.Add("acceptsall2",
                 new OuroSellerEndpointAdapter(connection,
                     "acceptsall2",
-                    new AcceptsAllOuroSellerEndPoint("Yet Another Eager Company", new Uri("http://google.com")),
+                    new AcceptsAllOuroSellerEndPoint("Yet Another Eager Company", new Uri("http://google.com"), new Random().Next(0, 3000)),
                     _incomingStream, _credentials));
 
             foreach (var adapter in _backendAdapters.Values)
