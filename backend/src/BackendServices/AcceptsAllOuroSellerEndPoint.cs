@@ -21,6 +21,8 @@ namespace BackendServices
                 DeliveryPostCode = request.DeliveryPostCode,
                 DesiredDeliveryDate = request.DesiredDeliveryDate,
                 HistoricInterestRequired = request.HistoricInterestRequired,
+                Vendor = _companyName,
+                VendorImageUrl = _imageUri.ToString(),
                 ImageUrl = _imageUri.ToString(),
                 NumberOfWings = request.NumberOfWings,
                 Ownership = request.Ownership,

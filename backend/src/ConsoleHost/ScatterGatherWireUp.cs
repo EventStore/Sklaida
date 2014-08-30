@@ -65,17 +65,17 @@ namespace ConsoleHost
             _backendAdapters.Add("declining1",
                 new OuroSellerEndpointAdapter(connection,
                     "declining1",
-                    new DecliningOuroSellerEndpoint("crap company", new Uri("http://google.com")),
+                    new DecliningOuroSellerEndpoint("Declining Company", new Uri("http://google.com")),
                     _incomingStream, _credentials));
             _backendAdapters.Add("acceptsall1",
                 new OuroSellerEndpointAdapter(connection,
                     "acceptsall1",
-                    new AcceptsAllOuroSellerEndPoint("too eager company", new Uri("http://google.com")),
+                    new AcceptsAllOuroSellerEndPoint("Eager Company", new Uri("http://google.com")),
                     _incomingStream, _credentials));
             _backendAdapters.Add("acceptsall2",
                 new OuroSellerEndpointAdapter(connection,
                     "acceptsall2",
-                    new AcceptsAllOuroSellerEndPoint("another eager company", new Uri("http://google.com")),
+                    new AcceptsAllOuroSellerEndPoint("Yet Another Eager Company", new Uri("http://google.com")),
                     _incomingStream, _credentials));
 
             foreach (var adapter in _backendAdapters.Values)

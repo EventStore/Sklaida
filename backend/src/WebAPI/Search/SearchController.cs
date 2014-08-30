@@ -50,7 +50,7 @@ namespace WebAPI.Search
             //                                                    .SetReadRole(Request.User),
             //                                       new UserCredentials("backenduser", "password"));
             //
-            //This code also sets and expiration on the stream of 5 minutes. More than
+            //This code also sets an expiration on the stream of 5 minutes. More than
             //likely in a production system you would not want such a short expiration
             //this is more so to be able to show the functionality of expiring the
             //results over time in a way that can actually be demoed. In most such

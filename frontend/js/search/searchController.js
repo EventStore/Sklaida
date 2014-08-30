@@ -5,11 +5,14 @@ angular.module('sklaidaApp')
             $scope.busy = false;
             $scope.init = function() {
                 $scope.fieldsToSubmit = {
-                    SearchType: "Template",
+                    SearchType: 'Template',
+                    Ownership: 'Lease',
+                    NumberOfWings: 2,
                     DesiredDeliveryDate: formatDate(new Date())
                 }
             }
             $scope.submit = function() {
+                $scope.error = '';
                 $scope.busy = true;
                 $scope.results = [];
                 searchService.search($scope.fieldsToSubmit, searchCompleted);
@@ -25,6 +28,11 @@ angular.module('sklaidaApp')
             }
 
             function searchCompleted(err, response) {
+                if(err) { 
+                    $scope.busy = false;
+                    $scope.error = err; 
+                    return; 
+                }
                 $scope.busy = true;
                 searchService.pollForResults(response.Location, resultsReturned);
             }

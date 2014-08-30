@@ -29,7 +29,7 @@
                 <h2 class="page-title">Search</h2>
                 <form class="form-horizontal" ng-init="init()" role="form" ng-submit="submit()">
                     <div class="form-group">
-                        <label for="exampleInputEmail1" class="col-sm-2 control-label">Ouro Type</label>
+                        <label for="ouroType" class="col-sm-2 control-label">Ouro Type</label>
                         <div class="dropdown col-sm-2">
                             <select name="SearchType" ng-model="fieldsToSubmit.SearchType" class="form-control">
                                 <option>Template</option>
@@ -102,23 +102,42 @@
             </div>
             <div class="container-right">
                 <h2 class="page-title">Results</h2>
-                <table class="table-queues">
+                <table class="table-queues" style="text-align:center;">
                     <thead>
                         <tr>
-                            <th ng-click="setSortByField('type')">Type &#x21D5;</th>
                             <th ng-click="setSortByField('data.vendor')">Vendor &#x21D5;</th>
                             <th ng-click="setSortByField('data.price')">Price &#x21D5;</th>
+                            <th ng-click="setSortByField('data.numberOfWings')">Number of Wings &#x21D5;</th>
+                            <th ng-click="setSortByField('data.ownership')">Ownership &#x21D5;</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="result in results|orderBy:fieldToSortBy:reverseSort" ng-click="followLink(result)">
-                            <td>{{ result.type }}</td>
-                            <td>{{ result.data.vendor }}</td>
-                            <td>{{ result.data.price | currency }}</td>
+                            <td>
+                                <a ng-href="{{result.data.clickThroughUrl}}">
+                                    <img src="images/sample_company_logo.png">
+                                    <h3>{{ result.data.vendor }}</h3>
+                                </a>
+                            </td>
+                            <td>
+                                <h1 ng-show="result.data.price">{{ result.data.price | currency }}<h1>
+                                <h1 ng-show="!result.data.price">-<h1>
+                            </td>
+                            <td>
+                                <i ng-repeat="i in [] | range:result.data.numberOfWings">
+                                    <img src="images/ouro_wings.png">
+                                </i>
+                            </td>
+                            <td>{{ result.data.ownership }}</td>
+                            <td>More Details <strong>+</strong></td>
                         </tr>
                         <tr ng-hide="results.length > 0">
-                            <td colspan="3" style="text-align:center;">
+                            <td colspan="5" style="text-align:center;">
                                 <em ng-show="!busy">No results</em>
+                                <div class="form-table--error" ng-show="error">
+                                    <h2>{{error}}</h2>
+                                </div>
                                 <img src="images/loading.gif" ng-show="busy" style="text-align:center"/>
                             </td>
                         </tr>

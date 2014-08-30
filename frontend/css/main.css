@@ -107,7 +107,6 @@ table {
 }
 td, th {
     padding: 0.5rem;
-    text-align: left;
 }
 th {
     background: #f2f4f0;
@@ -412,10 +411,13 @@ tbody .table-subheading {
 .table-highlightred {
     color: #e22430;
 }
-.table-queues th, .table-queues td {
+.table-queues th{
     text-align: right;
 }
-.table-queues th:first-child, .table-queues th:last-child, .table-queues td:first-child, .table-queues td:last-child {
+.table-queues td {
+    text-align: center;
+}
+.table-queues th:first-child, .table-queues th:last-child{
     text-align: left;
 }
 .table-projections th, .table-projections td {
@@ -526,6 +528,6 @@ select {
     width:170px;
 }
 tr:hover{
-    background-color:rgba(90, 138, 0, 0.5);
+    background-color:rgba(90, 138, 0, 0.3);
     cursor:pointer;
 }

@@ -5,7 +5,7 @@ angular.module('sklaidaApp')
             var currentPoller = null;
             return {
                 stop: function() {
-                    if(currentPoller !== null){
+                    if (currentPoller !== null) {
                         currentPoller.stop();
                     }
                 },
@@ -77,8 +77,8 @@ angular.module('sklaidaApp')
                 }
                 return {
                     stop: function() {
-                        if(timer) $timeout.cancel(timer);
-                        if(requestCanceller) requestCanceller.resolve('cancelled');
+                        if (timer) $timeout.cancel(timer);
+                        if (requestCanceller) requestCanceller.resolve('cancelled');
                     }
                 }
             }

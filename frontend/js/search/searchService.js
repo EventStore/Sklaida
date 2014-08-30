@@ -16,7 +16,7 @@ angular.module('sklaidaApp')
                         });
                     })
                     .error(function(data, status){
-                    	callback(data, null);
+                    	callback('An error has occurred. The server might be unavailable, please try again later.', null);
                     });
                 },
                 pollForResults: function(searchResultUrlToPoll, callback) {
