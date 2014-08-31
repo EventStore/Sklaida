@@ -56,7 +56,7 @@ angular.module('sklaidaApp')
                     $http.get(nextPageUrl + "?embed=content", {
                         headers: {
                             'Accept': 'application/vnd.eventstore.atom+json',
-                            'ES-LongPoll': 5
+                            'ES-LongPoll': 30
                         },
                         timeout: requestCanceller.promise
                     })
