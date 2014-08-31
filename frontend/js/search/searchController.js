@@ -40,10 +40,13 @@ angular.module('sklaidaApp')
             function resultsReturned(err, e) {
                 $scope.busy = false;
                 if(!e) return;
-                $scope.results.push({
+
+                var receivedResult = {
                     data: e.data,
                     type: e.eventType
-                });
+                };
+
+                $scope.results.push(receivedResult);
             }
 
             function formatDate(dateToFormat) {

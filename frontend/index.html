@@ -121,15 +121,17 @@
                                 </a>
                             </td>
                             <td>
-                                <h1 ng-show="result.data.price">{{ result.data.price | currency }}<h1>
-                                <h1 ng-show="!result.data.price">-<h1>
+                                <h1 ng-show="result.type=='OuroResultFound'">{{ result.data.price | currency }}<h1>
+                                <h1 ng-show="result.type=='OuroQuoteDeclined'">-<h1>
+                            </td> 
+                            <td>
+                                <i ng-show="result.type=='OuroResultFound'" ng-repeat="i in [] | range:result.data.numberOfWings"><img src="images/ouro_wings.png"></i>
+                                <h1 ng-show="result.type=='OuroQuoteDeclined'">-<h1>
                             </td>
                             <td>
-                                <i ng-repeat="i in [] | range:result.data.numberOfWings">
-                                    <img src="images/ouro_wings.png">
-                                </i>
+                                <span ng-show="result.type=='OuroResultFound'">{{ result.data.ownership }}</span>
+                                <h1 ng-show="result.type=='OuroQuoteDeclined'">-<h1>
                             </td>
-                            <td>{{ result.data.ownership }}</td>
                             <td>More Details <strong>+</strong></td>
                         </tr>
                         <tr ng-hide="results.length > 0">
