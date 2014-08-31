@@ -6,6 +6,9 @@ angular.module('sklaidaApp')
             var timer = null;
             return {
                 stop: function() {
+                    if(timer){
+                        $timeout.cancel(timer);
+                    }
                     if (currentPoller !== null) {
                         currentPoller.stop();
                     }
@@ -23,6 +26,7 @@ angular.module('sklaidaApp')
                 readFirstPage();
 
                 function readFirstPage() {
+                    $timeout.cancel(timer);
                     $http.get(nextPageUrl + '?embed=content', {
                         headers: {
                             'Accept': 'application/vnd.eventstore.atom+json'
@@ -48,10 +52,6 @@ angular.module('sklaidaApp')
                         timer = $timeout(readNextPage, 0);
                     })
                     .error(function(data, statuscode){
-                        console.info('error');
-                        console.info('ensuring that the request is cancelled');
-                        console.log(timer);
-                        console.log(requestCanceller);
                         timer = $timeout(readNextPage, pollingInterval);
                     });
                 }
