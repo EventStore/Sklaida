@@ -3,6 +3,7 @@ angular.module('sklaidaApp')
         function($http, $q, $timeout) {
             var pollingInterval = 1000;
             var currentPoller = null;
+            var timer = null;
             return {
                 stop: function() {
                     if (currentPoller !== null) {
@@ -18,7 +19,6 @@ angular.module('sklaidaApp')
                 var nextPageUrl = streamUrl;
                 var readNextPage = readFirstPage;
                 var requestCanceller = $q.defer();
-                var timer = null;
 
                 readFirstPage();
 
@@ -29,9 +29,7 @@ angular.module('sklaidaApp')
                         },
                         timeout: requestCanceller.promise
                     })
-                    .then(function(response) {
-                        var data = response.data;
-
+                    .success(function(data) {
                         var lastLink = getFeedLink(data.links, 'last');
                         if (!lastLink) {
                             // head is the last page already
@@ -48,6 +46,13 @@ angular.module('sklaidaApp')
                         }
                         readNextPage = readForwardPage;
                         timer = $timeout(readNextPage, 0);
+                    })
+                    .error(function(data, statuscode){
+                        console.info('error');
+                        console.info('ensuring that the request is cancelled');
+                        console.log(timer);
+                        console.log(requestCanceller);
+                        timer = $timeout(readNextPage, pollingInterval);
                     });
                 }
 
@@ -60,9 +65,7 @@ angular.module('sklaidaApp')
                         },
                         timeout: requestCanceller.promise
                     })
-                    .then(function(response) {
-                        var data = response.data;
-
+                    .success(function(data) {
                         if (data.entries) {
                             for (var i = 0, n = data.entries.length; i < n; i += 1) {
                                 var event = data.entries[n - i - 1].content;
@@ -73,6 +76,9 @@ angular.module('sklaidaApp')
                         var prevLink = getFeedLink(data.links, 'previous');
                         nextPageUrl = prevLink || nextPageUrl;
                         timer = $timeout(readNextPage, prevLink ? 0 : pollingInterval);
+                    })
+                    .error(function(data, statuscode){
+                        timer = $timeout(readNextPage, pollingInterval);
                     });
                 }
                 return {
