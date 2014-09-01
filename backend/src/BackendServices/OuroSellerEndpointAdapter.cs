@@ -30,6 +30,17 @@ namespace BackendServices
 
         public void StartListening()
         {
+            //
+            // This can also be done with competing consumers for load balancing
+            // the workload across many of the same adapter. In order to use
+            // competing consumers you would use ConnectToPersistentSubscription
+            // and first create a named persistent subscription to connect to
+            //
+            // *note that the code from competing branch is not yet merged to master
+            //
+            // Also note that this is currently using an admin user for subscribing
+            // in most systems a specific user would be prefered as opposed to using
+            // an admin user for this behaviour.
             _subscription = _connection.SubscribeToStreamAsync(_incomingStream, 
                                                                false, 
                                                                EventAppeared,
